@@ -29,8 +29,6 @@
             padding:0;
             margin:0;
             box-sizing: border-box;
-            user-select: none;
-            cursor: none;
         }
         html, body {
             overscroll-behavior: none;
@@ -40,6 +38,15 @@
             height:100%;
             width:100%;
             font-family: 'Arya', sans-serif;
+        }
+
+        .kiosk * {
+            user-select: none;
+            cursor: none;
+        }
+
+        .kiosk article {
+            pointer-events: none;
         }
 
 
@@ -72,7 +79,6 @@
             bottom: 0;
             left:100px;
             width:550px;
-            pointer-events: none;
         }
         
         h2 {
@@ -97,6 +103,8 @@
             border-left: 4px solid rgb(var(--r), var(--g), var(--b), .5);
             padding-left: 2em;
             padding-bottom: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         h3 {
@@ -124,6 +132,7 @@
             bottom:0;
             left:0;
             z-index: -1;
+            user-select: none;
         }
         #viewer img {
             width:100%;
@@ -282,15 +291,15 @@
     </article>
 
 
-    <main id="viewer"></main>
+    <main id="viewer" aria-label="Scroll or Pinch to Zoom"></main>
 
 
-    <nav>
+    <nav aria-label="Switch between different images">
         <ul></ul>
     </nav>
 
 
-    <div class="instructions">
+    <div class="instructions" aria-hidden="true">
         <div class="zoom">
             <svg width="245" height="55" viewBox="0 0 245 55" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1.53027" y="1.53027" width="242" height="52" rx="26" stroke="#D9D9D9" stroke-width="2" stroke-dasharray="10 10"/>

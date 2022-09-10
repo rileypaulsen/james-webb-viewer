@@ -148,6 +148,12 @@ const data = [
 
 
 // SETUP --------------------------------------------------------------------------------
+    const params = new URLSearchParams(window.location.search);
+    if( params.has('kiosk') ){
+        document.body.className = 'kiosk';
+    }
+
+
     let activeImage;
     const shuffleRandomImage = () => {
         activeImage = data[Math.floor(Math.random() * data.length)];
@@ -160,6 +166,8 @@ const data = [
         const li = document.createElement('li');
         const button = document.createElement('button');
         const img = document.createElement('img');
+        button.ariaLabel = d.name;
+        button.title = 'Switch to: '+d.name;
         img.src = d.thumbnail;
         button.appendChild(img);
         li.appendChild(button);
