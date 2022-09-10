@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Webb Image Viewer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arya:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="iv-viewer.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --r:183;
+            --g:176;
+            --b:255;
+            --position:center center;
+        }
+        @font-face {
+            font-family: 'Amalfi Coast Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Amalfi Coast Regular'), url('Amalfi Coast.woff') format('woff');
+        }
+        * {
+            padding:0;
+            margin:0;
+            box-sizing: border-box;
+            user-select: none;
+            cursor: none;
+        }
+        html, body {
+            overscroll-behavior: none;
+        }
+        body {
+            background:black;
+            height:100%;
+            width:100%;
+            font-family: 'Arya', sans-serif;
+        }
+
+
+
+    /* HEADER */
+        header {
+            position: fixed;
+            top:30px;
+            left:30px;
+            background: rgba(var(--r), var(--g), var(--b), 0.1);
+            backdrop-filter: blur(30px);
+            padding:15px 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            text-transform: uppercase;
+            color:rgba(var(--r), var(--g), var(--b), 1);
+            font-size: 21px;
+            line-height: 1;
+        }
+        h1 span {
+            color: white;
+        }
+
+
+    /* CONTENT */
+        article {
+            color:white;
+            position: fixed;
+            bottom: 0;
+            left:100px;
+            width:550px;
+            pointer-events: none;
+        }
+        
+        h2 {
+            font-family: "Amalfi Coast Regular", fantasy;
+            color:rgba(var(--r), var(--g), var(--b), 1);
+            opacity:.7;
+            line-height: 1.3em;
+            width:800px;
+            font-size: 72px;
+            text-shadow: 0px 0px 50px rgba(var(--r), var(--g), var(--b), 1);
+            transform:translateX(-0%) translateY(-10%) rotate(-6.73deg);
+            text-indent:-1em;
+            font-weight: normal;
+        }
+        h2 span {
+            display: inline-block;
+            margin-left: 1em;
+            margin-right: -.8em;
+        }
+
+        article div {
+            border-left: 4px solid rgb(var(--r), var(--g), var(--b), .5);
+            padding-left: 2em;
+            padding-bottom: 40px;
+        }
+
+        h3 {
+            font-family: 'Arya';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 40px;
+            margin: .5em 0;
+            line-height: 100%;
+            text-shadow: 4px 4px 0px #000000;
+        }
+        
+        p {
+            font-size: 24px;
+            line-height: 140%;
+            text-shadow: 2px 2px 0px #000000;
+        }
+
+
+    /* VIEWER */
+        #viewer {
+            position: absolute;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            z-index: -1;
+        }
+        #viewer img {
+            width:100%;
+            height:100%;
+            object-fit: cover;
+            object-position: var(--position);
+            display: block;
+        }
+        .iv-fullscreen {
+            z-index: -1;
+        }
+        
+
+    /* NAVIGATION */
+        nav {
+            position: fixed;
+            bottom:30px;
+            right:30px;
+            background: rgba(var(--r), var(--g), var(--b), 0.1);
+            backdrop-filter: blur(30px);
+            /* Note: backdrop-filter has minimal browser support */
+            padding:20px;
+            border-radius: 17px;
+        }
+        ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        li {
+        }
+        li.active button {
+            opacity:1;
+            border: 1px solid rgba(var(--r), var(--g), var(--b), 0.5);
+            filter: drop-shadow(0px 0px 10px rgba(var(--r), var(--g), var(--b), 0.7));
+        }
+        li:not(.active) button:focus-visible {
+            filter: drop-shadow(0px 0px 10px rgba(255,255,255,1));
+        }
+        li button {
+            border-radius: 10px;
+            border: 1px solid transparent;
+            background:none;
+            overflow: hidden;
+            display: block;
+            opacity:.7;
+            transition:all 1s;
+            cursor: pointer;
+            outline:none;
+        }
+        li img {
+            width:100px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+        }
+
+    /* INSTRUCTIONS */
+        .instructions {
+            pointer-events: none;
+            border-radius:50%;
+            height:300px;
+            width:300px;
+            background: rgba(var(--r), var(--g), var(--b), 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            right:50px;
+            top:50px;
+            overflow: hidden;
+            opacity:1;
+            transition:opacity .5s;
+            box-shadow:0px 0px 100px rgba(var(--r), var(--g), var(--b), 0.5);
+        }
+
+        .instructions.understood {
+            opacity:0;
+        }
+
+        .zoom {
+            position: absolute;
+            transform:translate(-50%,-50%) rotate(-45deg);
+            top:50%;
+            left:50%;
+        }
+        .instructions img {
+            height:100%;
+            width:100%;
+            border-radius:50%;
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: -1;
+            opacity:.3;
+            box-sizing: cover;
+            transform-origin: center center;
+            animation:zoom 2s infinite alternate;
+            transform:scale(1);
+        }
+
+        svg * {
+            transform-box: fill-box;
+        }
+        
+        svg rect {
+            transform-origin: center center;
+            animation:border-shrink 2s infinite alternate;
+            transform:translate(calc(242px / 2)) translateX(-50%);
+        }
+        
+        svg circle:nth-of-type(1), svg circle:nth-of-type(2) {
+            transform-origin: center center;
+            animation:move-right 2s infinite alternate;
+        }
+        
+        @keyframes border-shrink {
+            0% { width:242px; }
+            25% { width:242px; }
+            75% { width:calc(242px / 2); }
+            100% { width:calc(242px / 2); }
+        }
+        
+        @keyframes move-right {
+            0% { transform:translateX(0%); }
+            25% { transform:translateX(0%); }
+            75% { transform:translateX(calc(242px / 4)); }
+            100% { transform:translateX(calc(242px / 4)); }
+        }
+        
+        @keyframes move-left {
+            0% { transform:translateX(0%); }
+            25% { transform:translateX(0%); }
+            75% { transform:translateX(calc(-242px / 4)); }
+            100% { transform:translateX(calc(-242px / 4)); }
+        }
+        
+        @keyframes zoom {
+            0% { transform:scale(3); }
+            25% { transform:scale(3); }
+            75% { transform:scale(1); }
+            100% { transform:scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The latest from the <span>James Webb Space Telescope</span></h1>
+    </header>
+
+
+    <article>
+        <h2></h2>
+        <div>
+            <h3></h3>
+            <p></p>
+        </div>
+    </article>
+
+
+    <main id="viewer"></main>
+
+
+    <nav>
+        <ul></ul>
+    </nav>
+
+
+    <div class="instructions">
+        <div class="zoom">
+            <svg width="245" height="55" viewBox="0 0 245 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1.53027" y="1.53027" width="242" height="52" rx="26" stroke="#D9D9D9" stroke-width="2" stroke-dasharray="10 10"/>
+                <circle cx="27.5303" cy="27.5303" r="24" fill="#B7B0FF" fill-opacity="0.2" stroke="#D9D9D9" stroke-width="2"/>
+                <circle cx="217.529" cy="27.5303" r="24" fill="#B7B0FF" fill-opacity="0.2" stroke="#D9D9D9" stroke-width="2"/>
+            </svg>
+        </div>
+        <img src="" alt="">
+    </div>
+
+    <script src="iv-viewer.es.js" type="module"></script>
+    <script src="jameswebb.js" type="module"></script>
+</body>
+</html>
