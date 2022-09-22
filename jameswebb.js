@@ -87,6 +87,17 @@ const data = [
         color:'#f5b5c2',
         position:'center center'
     },
+    {
+        title:'Ice Giant',
+        name:'Neptune Wide Field',
+        description:'The series of bright patches in Neptune ’s southern hemisphere represent high-altitude methane-ice clouds. More subtly, a thin line of brightness circling the planet’s equator could be a visual signature of global atmospheric circulation that powers Neptune’s winds and storms. The JWST has teased out a continuous band of high-latitude clouds surrounding a previously-known vortex at Neptune’s southern pole.',
+        thumbnail:'thumbnails/thumbnail9.jpg',
+        large:'https://stsci-opo.org/STScI-01GCVNZ68YTC7FPTBSNA3QDGYW.png',
+        full:'https://stsci-opo.org/STScI-01GCVNZ68YTC7FPTBSNA3QDGYW.png',
+        original:'https://stsci-opo.org/STScI-01GCVNZ68YTC7FPTBSNA3QDGYW.png',
+        color:'#b9adbf',
+        position:'center center'
+    },
 ];
 
 
